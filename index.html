@@ -6,7 +6,6 @@
     <title>GestAuto Brasil - Busca de Oficinas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* [MANTENHA TODO O CSS ANTERIOR IGUAL] */
         * {
             margin: 0;
             padding: 0;
@@ -21,7 +20,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px; /* Aumentado para acomodar colunas mais largas */
             margin: 0 auto;
         }
 
@@ -267,6 +266,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         thead {
@@ -282,6 +282,9 @@
             border-bottom: 2px solid #e8ecef;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         td {
@@ -289,6 +292,10 @@
             border-bottom: 1px solid #e8ecef;
             font-size: 0.9rem;
             color: #2c3e50;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: top;
         }
 
         tbody tr:hover {
@@ -302,6 +309,22 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-ativo {
+            background: #27ae60;
+        }
+
+        .status-inativo {
+            background: #e74c3c;
         }
 
         .maps-link {
@@ -406,6 +429,67 @@
             font-size: 0.85rem;
         }
 
+        /* NOVOS ESTILOS PARA LARGURA DAS COLUNAS - OTIMIZADOS */
+        .col-posicao { width: 70px; }
+        .col-status { width: 90px; }
+        .col-oficina { width: 200px; }
+        .col-whatsapp { width: 130px; }
+        .col-endereco { width: 220px; }
+        .col-cidade { width: 140px; }
+        .col-cep { width: 100px; }
+        .col-distancia { width: 80px; }
+        .col-placas { width: 70px; }
+        .col-ticket { width: 120px; }
+        .col-volume { width: 70px; }
+        .col-setor { width: 130px; }
+
+        /* Melhorias para legibilidade */
+        .table-scroll-container {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        .full-text {
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .oficina-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .ticket-value {
+            font-weight: 600;
+            color: #157f0d;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+            
+            .table-scroll-container {
+                font-size: 0.85rem;
+            }
+            
+            /* Ajustes para tablets */
+            .col-posicao { width: 60px; }
+            .col-status { width: 80px; }
+            .col-oficina { width: 180px; }
+            .col-whatsapp { width: 120px; }
+            .col-endereco { width: 200px; }
+            .col-cidade { width: 120px; }
+            .col-cep { width: 90px; }
+            .col-distancia { width: 70px; }
+            .col-placas { width: 60px; }
+            .col-ticket { width: 110px; }
+            .col-volume { width: 60px; }
+            .col-setor { width: 110px; }
+        }
+
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -420,13 +504,34 @@
                 padding: 20px;
             }
             
-            .table-container {
-                overflow-x: auto;
-            }
-            
             .filter-group {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            
+            /* Layout responsivo para mobile */
+            table {
+                table-layout: auto;
+                min-width: 800px;
+            }
+            
+            .table-scroll-container {
+                overflow-x: auto;
+            }
+            
+            .col-posicao,
+            .col-status,
+            .col-oficina,
+            .col-whatsapp,
+            .col-endereco,
+            .col-cidade,
+            .col-cep,
+            .col-distancia,
+            .col-placas,
+            .col-ticket,
+            .col-volume,
+            .col-setor {
+                width: auto;
             }
         }
     </style>
@@ -541,24 +646,27 @@
                         <div class="table-header">
                             <h3>🏆 Top 10 Melhores Oficinas</h3>
                         </div>
-                        <table id="resultTable">
-                            <thead>
-                                <tr>
-                                    <th>Posição</th>
-                                    <th>Oficina</th>
-                                    <th>WhatsApp</th>
-                                    <th>Endereço</th>
-                                    <th>Cidade</th>
-                                    <th>CEP</th>
-                                    <th>Distância</th>
-                                    <th>Placas</th>
-                                    <th>Ticket Médio</th>
-                                    <th>Volume</th>
-                                    <th>Setor</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-scroll-container">
+                            <table id="resultTable">
+                                <thead>
+                                    <tr>
+                                        <th class="col-posicao">Posição</th>
+                                        <th class="col-status">Status</th>
+                                        <th class="col-oficina">Oficina</th>
+                                        <th class="col-whatsapp">WhatsApp</th>
+                                        <th class="col-endereco">Endereço</th>
+                                        <th class="col-cidade">Cidade</th>
+                                        <th class="col-cep">CEP</th>
+                                        <th class="col-distancia">Distância</th>
+                                        <th class="col-placas">Placas</th>
+                                        <th class="col-ticket">Ticket Médio</th>
+                                        <th class="col-volume">Volume</th>
+                                        <th class="col-setor">Setor</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -683,7 +791,6 @@
             }
         });
 
-        // [MANTENHA TODAS AS OUTRAS FUNÇÕES EXATAMENTE COMO ESTAVAM NO CÓDIGO ORIGINAL]
         // Função para buscar cidade por CEP
         async function buscarCidadePorCEP(cep) {
             cep = cep.replace(/\D/g, '');
@@ -715,7 +822,7 @@
             }
         }
 
-        // Função para buscar dados da planilha
+        // Função para buscar dados da planilha - ATUALIZADA COM COLUNAS AN, AO E Z
         async function fetchSheetData(url) {
             return new Promise((resolve, reject) => {
                 const csvUrl = url.replace('/pubhtml', '') + '/pub?output=csv';
@@ -744,7 +851,7 @@
             });
         }
 
-        // Parser CSV
+        // Parser CSV - ATUALIZADO COM COLUNAS AN, AO E Z
         function parseCSV(csvText) {
             const lines = csvText.split('\n').filter(line => line.trim() !== '');
             if (lines.length < 2) return [];
@@ -754,8 +861,10 @@
             for (let i = 1; i < lines.length; i++) {
                 const values = parseCSVLine(lines[i]);
                 
+                // Mapeamento das colunas: A=0, B=1, C=2, D=3, E=4, F=5, G=6, T=19, Z=25, AH=33, AM=38, AN=39, AO=40
                 const row = {
-                    oficina: values[0] || '',
+                    // Coluna A (0) - Nome original da oficina
+                    oficina_original: values[0] || '',
                     whatsapp: values[1] || '',  
                     endereco: values[2] || '',
                     numero: values[3] || '',
@@ -763,11 +872,17 @@
                     estado: values[5] || '',
                     cep: values[6] || '',
                     placa: values[19] || '',
+                    status_aprovacao: values[25] || '', // Coluna Z - Status de Aprovação
                     valor_aprovado: values[33] || '0',
-                    setor: values[38] || ''
+                    setor: values[38] || '',
+                    status: values[39] || '', // Coluna AN - Status (ATIVO/INATIVO)
+                    oficina_nome: values[40] || '' // Coluna AO - Nome preferencial da oficina
                 };
                 
-                if (row.oficina.trim() || row.placa.trim()) {
+                // Usar nome da coluna AO, se vazio usar coluna A
+                row.oficina = row.oficina_nome.trim() || row.oficina_original.trim();
+                
+                if (row.oficina || row.placa.trim()) {
                     rows.push(row);
                 }
             }
@@ -826,12 +941,12 @@
             }
         }
 
-        // Agrupar oficinas - CORREÇÃO DO TICKET MÉDIO
+        // Agrupar oficinas - ATUALIZADO COM FILTRO DA COLUNA Z
         function agruparOficinas(rows) {
             const mapa = new Map();
             
             rows.forEach(r => {
-                const nome = (r['oficina'] || 'Desconhecida').toString().trim();
+                const nome = r.oficina || 'Desconhecida';
                 const cep = (r['cep'] || '').toString().replace(/\D/g,'');
                 const cidade = (r['cidade'] || '').toString().toUpperCase();
                 const estado = (r['estado'] || '').toString();
@@ -839,30 +954,53 @@
                 const numero = (r['numero'] || '').toString();
                 const whatsapp = (r['whatsapp'] || '').toString();
                 const placa = (r['placa'] || '').toString().trim();
+                const statusAprovacao = (r['status_aprovacao'] || '').toString().toUpperCase();
                 const valor = parseMoney(r['valor_aprovado'] || 0);
                 const setor = (r['setor'] || '').toString();
+                const status = (r['status'] || '').toString().toUpperCase();
 
                 if (!mapa.has(nome)) {
                     mapa.set(nome, {
                         nome, cep, cidade, estado, endereco, numero, whatsapp, 
-                        valores: [], placas: new Set(), setores: new Set(), setor
+                        valores: [], 
+                        placas: new Set(), 
+                        setores: new Set(), 
+                        status: new Set(),
+                        setor
                     });
                 }
                 
                 const off = mapa.get(nome);
-                off.valores.push(valor);
+                
+                // CORREÇÃO: Só adiciona valor se for maior que zero E status_aprovacao for "APROVADO"
+                if (valor > 0 && statusAprovacao === 'APROVADO') {
+                    off.valores.push(valor);
+                }
+                
                 if (placa) off.placas.add(placa);
                 if (setor) off.setores.add(setor);
+                if (status) off.status.add(status);
                 if (!off.cep && cep) off.cep = cep;
                 if (!off.cidade && cidade) off.cidade = cidade;
                 if (!off.estado && estado) off.estado = estado;
             });
 
             return Array.from(mapa.values()).map(o => {
-                // CORREÇÃO DO TICKET MÉDIO: Valor Total / Quantidade de Placas Distintas
                 const qtdPlacasDistintas = o.placas.size;
-                const valorTotal = o.valores.reduce((a, b) => a + b, 0);
-                const ticketMedio = qtdPlacasDistintas > 0 ? valorTotal / qtdPlacasDistintas : 0;
+                
+                // CORREÇÃO DO TICKET MÉDIO: Considera apenas valores > 0 (já filtrados por "APROVADO")
+                const valoresValidos = o.valores.filter(v => v > 0);
+                const valorTotal = valoresValidos.reduce((a, b) => a + b, 0);
+                
+                // Ticket médio = Valor Total / Quantidade de Placas Distintas (apenas se tiver valores válidos)
+                const ticketMedio = qtdPlacasDistintas > 0 && valoresValidos.length > 0 
+                    ? valorTotal / qtdPlacasDistintas 
+                    : 0;
+
+                // Determinar status predominante
+                const statusArray = Array.from(o.status);
+                const statusFinal = statusArray.includes('ATIVO') ? 'ATIVO' : 
+                                  statusArray.includes('INATIVO') ? 'INATIVO' : 'INDEFINIDO';
 
                 return {
                     nome: o.nome,
@@ -873,10 +1011,12 @@
                     numero: o.numero || '',
                     whatsapp: o.whatsapp || '',
                     setor: Array.from(o.setores).join(', '),
+                    status: statusFinal,
                     volume: o.valores.length,
                     qtdPlacas: qtdPlacasDistintas,
                     valorTotal: valorTotal,
-                    ticketMedio: ticketMedio
+                    ticketMedio: ticketMedio,
+                    valoresValidos: valoresValidos.length // Para debug
                 };
             });
         }
@@ -954,7 +1094,7 @@
             .slice(0, 10);
         }
 
-        // Renderizar tabela com Google Maps
+        // Renderizar tabela - ATUALIZADA COM LARGURAS OTIMIZADAS
         function renderTable(rows, cidadeOrigem, totalRegistros, setorFiltro) {
             const table = el('resultTable');
             const tbody = table.querySelector('tbody');
@@ -969,23 +1109,31 @@
             rows.forEach((r, index) => {
                 const tr = document.createElement('tr');
                 const mapsLink = gerarLinkMaps(currentCepOrigem, r.cep);
+                const statusClass = r.status === 'ATIVO' ? 'status-ativo' : 
+                                  r.status === 'INATIVO' ? 'status-inativo' : 'status-inativo';
+                const statusText = r.status === 'ATIVO' ? 'ATIVO' : 
+                                 r.status === 'INATIVO' ? 'INATIVO' : 'INDEFINIDO';
                 
                 tr.innerHTML = `
-                    <td><div class="position-badge">${index + 1}º</div></td>
-                    <td><strong>${escapeHtml(r.nome)}</strong></td>
-                    <td>${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
-                    <td>${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
-                    <td>${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}</td>
-                    <td>${escapeHtml(formatCep(r.cep))}</td>
-                    <td>
+                    <td class="col-posicao"><div class="position-badge">${index + 1}º</div></td>
+                    <td class="col-status">
+                        <span class="status-indicator ${statusClass}" title="${statusText}"></span>
+                        ${statusText}
+                    </td>
+                    <td class="col-oficina full-text"><strong class="oficina-name">${escapeHtml(r.nome)}</strong></td>
+                    <td class="col-whatsapp">${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
+                    <td class="col-endereco full-text">${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
+                    <td class="col-cidade">${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}</td>
+                    <td class="col-cep">${escapeHtml(formatCep(r.cep))}</td>
+                    <td class="col-distancia">
                         <a href="${mapsLink}" target="_blank" class="maps-link" title="Ver rota no Google Maps">
                             🗺️ Rota
                         </a>
                     </td>
-                    <td>${r.qtdPlacas}</td>
-                    <td><strong>${formatMoney(r.ticketMedio)}</strong></td>
-                    <td>${r.volume}</td>
-                    <td>${escapeHtml(r.setor)}</td>
+                    <td class="col-placas">${r.qtdPlacas}</td>
+                    <td class="col-ticket"><strong class="ticket-value">${formatMoney(r.ticketMedio)}</strong></td>
+                    <td class="col-volume">${r.volume}</td>
+                    <td class="col-setor">${escapeHtml(r.setor)}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1045,19 +1193,19 @@
             el('errorBox').innerHTML = '<div class="error-box">' + escapeHtml(msg).replace(/\n/g, '<br>') + '</div>'; 
         }
 
-        // Dados de exemplo
+        // Dados de exemplo ATUALIZADOS com status e status_aprovacao
         function getSampleData() {
             return [
-                {"oficina":"OFICINA CENTRO","whatsapp":"11999999999","endereco":"RUA PRINCIPAL","numero":"123","cidade":"SÃO PAULO","estado":"SP","cep":"01311000","placa":"ABC1D23","valor_aprovado":"1500.50","setor":"Multimarcas"},
-                {"oficina":"OFICINA ZONA SUL","whatsapp":"11888888888","endereco":"AV PAULISTA","numero":"456","cidade":"SÃO PAULO","estado":"SP","cep":"01311010","placa":"XYZ9W87","valor_aprovado":"2300.75","setor":"Movida"},
-                {"oficina":"MECÂNICA RÁPIDA","whatsapp":"11777777777","endereco":"RUA TESTE","numero":"789","cidade":"SÃO PAULO","estado":"SP","cep":"01311020","placa":"DEF4G56","valor_aprovado":"1800.00","setor":"Multimarcas"},
-                {"oficina":"AUTO CENTER SP","whatsapp":"11666666666","endereco":"RUA EXEMPLO","numero":"100","cidade":"SÃO PAULO","estado":"SP","cep":"01311030","placa":"GHI7H89","valor_aprovado":"1200.00","setor":"Multimarcas"},
-                {"oficina":"OFICINA QUALIDADE","whatsapp":"11555555555","endereco":"AV BRASIL","numero":"200","cidade":"SÃO PAULO","estado":"SP","cep":"01311040","placa":"JKL0I12","valor_aprovado":"3000.00","setor":"Movida"},
-                {"oficina":"MECÂNICA BARATA","whatsapp":"11444444444","endereco":"RUA ECONOMIA","numero":"50","cidade":"SÃO PAULO","estado":"SP","cep":"01311000","placa":"MNO3P45","valor_aprovado":"800.00","setor":"Multimarcas"},
-                {"oficina":"OFICINA EXPRESS","whatsapp":"11333333333","endereco":"AV RÁPIDA","numero":"300","cidade":"SÃO PAULO","estado":"SP","cep":"01311010","placa":"PQR6S78","valor_aprovado":"2500.00","setor":"Movida"},
-                {"oficina":"AUTO MECÂNICA","whatsapp":"11222222222","endereco":"RUA OFICINAS","numero":"75","cidade":"SÃO PAULO","estado":"SP","cep":"01311020","placa":"STU9V01","valor_aprovado":"1600.00","setor":"Multimarcas"},
-                {"oficina":"OFICINA TOP","whatsapp":"11111111111","endereco":"AV QUALIDADE","numero":"400","cidade":"SÃO PAULO","estado":"SP","cep":"01311030","placa":"VWX2Y34","valor_aprovado":"2800.00","setor":"Movida"},
-                {"oficina":"MECÂNICA CONFIÁVEL","whatsapp":"11000000000","endereco":"RUA CONFIANÇA","numero":"150","cidade":"SÃO PAULO","estado":"SP","cep":"01311040","placa":"YZA5B67","valor_aprovado":"1900.00","setor":"Multimarcas"}
+                {"oficina_original":"EATECH INTERFACES","oficina_nome":"EATECH INTERFACES","whatsapp":"4132244800","endereco":"R TIBAGI","numero":"674","cidade":"CURITIBA","estado":"PR","cep":"80060110","placa":"ABC1D23","status_aprovacao":"APROVADO","valor_aprovado":"250.00","setor":"Multimarcas","status":"INATIVO"},
+                {"oficina_original":"OFICINA PARTICULAR","oficina_nome":"OFICINA PARTICULAR","whatsapp":"4135277760","endereco":"Rua Emanuel Kant","numero":"60","cidade":"CURITIBA","estado":"PR","cep":"81020670","placa":"XYZ9W87","status_aprovacao":"APROVADO","valor_aprovado":"36550.00","setor":"Movida","status":"ATIVO"},
+                {"oficina_original":"ATF TRANSMISSÃO","oficina_nome":"ATF TRANSMISSÃO ESPECIALIZADA","whatsapp":"4135383600","endereco":"R ANNE FRANK","numero":"3054","cidade":"CURITIBA","estado":"PR","cep":"81650020","placa":"DEF4G56","status_aprovacao":"APROVADO","valor_aprovado":"1175.00","setor":"Multimarcas","status":"INATIVO"},
+                {"oficina_original":"AUTO ELÉTRICA HABBY'S","oficina_nome":"AUTO ELÉTRICA HABBY'S","whatsapp":"4132759000","endereco":"RUA WALDEMAR LOURENÇO","numero":"123","cidade":"CURITIBA","estado":"PR","cep":"81830000","placa":"GHI7H89","status_aprovacao":"APROVADO","valor_aprovado":"3300.00","setor":"Multimarcas","status":"ATIVO"},
+                {"oficina_original":"FRASO CENTRO AUTOMOTIVO","oficina_nome":"FRASO CENTRO AUTOMOTIVO","whatsapp":"4130397550","endereco":"RUA JOSÉ HAUER","numero":"1234","cidade":"CURITIBA","estado":"PR","cep":"81730400","placa":"JKL0I12","status_aprovacao":"APROVADO","valor_aprovado":"1100.00","setor":"Movida","status":"ATIVO"},
+                {"oficina_original":"FRESSATTO CENTRO AUTOMOTIVO","oficina_nome":"FRESSATTO CENTRO AUTOMOTIVO","whatsapp":"4132962710","endereco":"R JOSE HAUER","numero":"103","cidade":"CURITIBA","estado":"PR","cep":"81580330","placa":"PQR6S78","status_aprovacao":"APROVADO","valor_aprovado":"13577.00","setor":"Movida","status":"ATIVO"},
+                {"oficina_original":"DERBA E LARA CENTRO AUTOMOTIVO","oficina_nome":"DERBA E LARA CENTRO AUTOMOTIVO","whatsapp":"4130924400","endereco":"R JOSÉ HAUER","numero":"1105","cidade":"CURITIBA","estado":"PR","cep":"81730400","placa":"STU9V01","status_aprovacao":"APROVADO","valor_aprovado":"3255.00","setor":"Multimarcas","status":"ATIVO"},
+                {"oficina_original":"GARAGE 92","oficina_nome":"GARAGE 92","whatsapp":"41985361234","endereco":"RODOVIA BR 116","numero":"KM 92","cidade":"CURITIBA","estado":"PR","cep":"82590400","placa":"VWX2Y34","status_aprovacao":"APROVADO","valor_aprovado":"23333.00","setor":"Movida","status":"ATIVO"},
+                {"oficina_original":"BIELLA CENTRO AUTOMOTIVO","oficina_nome":"BIELLA CENTRO AUTOMOTIVO","whatsapp":"4130395000","endereco":"R BARTOLOMEU LOURENÇO","numero":"456","cidade":"CURITIBA","estado":"PR","cep":"81610060","placa":"YZA5B67","status_aprovacao":"APROVADO","valor_aprovado":"61350.00","setor":"Multimarcas","status":"ATIVO"},
+                {"oficina_original":"FRESSATTO CENTRO AUTOMOTIVO","oficina_nome":"FRESSATTO CENTRO AUTOMOTIVO","whatsapp":"4130952712","endereco":"AV SENADOR SALGADO FILHO","numero":"789","cidade":"CURITIBA","estado":"PR","cep":"81580000","placa":"MNO3P45","status_aprovacao":"APROVADO","valor_aprovado":"46384.00","setor":"Movida","status":"ATIVO"}
             ];
         }
     </script>
