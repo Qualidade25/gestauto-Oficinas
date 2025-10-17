@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 1400px; /* Aumentado para acomodar colunas mais largas */
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -274,11 +274,11 @@
         }
 
         th {
-            padding: 15px 12px;
+            padding: 15px 8px;
             text-align: left;
             font-weight: 600;
             color: #2c3e50;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             border-bottom: 2px solid #e8ecef;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -288,14 +288,15 @@
         }
 
         td {
-            padding: 12px;
+            padding: 10px 8px;
             border-bottom: 1px solid #e8ecef;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #2c3e50;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             vertical-align: top;
+            line-height: 1.3;
         }
 
         tbody tr:hover {
@@ -305,18 +306,21 @@
         .position-badge {
             background: linear-gradient(135deg, #157f0d, #105f0a);
             color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
             font-weight: 600;
+            display: inline-block;
+            text-align: center;
+            min-width: 35px;
         }
 
         .status-indicator {
             display: inline-block;
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            margin-right: 8px;
+            margin-right: 6px;
         }
 
         .status-ativo {
@@ -333,7 +337,8 @@
             font-weight: 500;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
+            font-size: 0.75rem;
         }
 
         .maps-link:hover {
@@ -429,65 +434,74 @@
             font-size: 0.85rem;
         }
 
-        /* NOVOS ESTILOS PARA LARGURA DAS COLUNAS - OTIMIZADOS */
-        .col-posicao { width: 70px; }
-        .col-status { width: 90px; }
-        .col-oficina { width: 200px; }
-        .col-whatsapp { width: 130px; }
-        .col-endereco { width: 220px; }
-        .col-cidade { width: 140px; }
-        .col-cep { width: 100px; }
-        .col-distancia { width: 80px; }
-        .col-placas { width: 70px; }
-        .col-ticket { width: 120px; }
-        .col-volume { width: 70px; }
-        .col-setor { width: 130px; }
+        /* LARGURAS OTIMIZADAS PARA VISUALIZAÇÃO COMPLETA SEM SCROLL */
+        .col-posicao { width: 60px; }
+        .col-status { width: 70px; }
+        .col-oficina { width: 180px; }
+        .col-whatsapp { width: 110px; }
+        .col-endereco { width: 200px; }
+        .col-cidade { width: 120px; }
+        .col-cep { width: 90px; }
+        .col-distancia { width: 70px; }
+        .col-placas { width: 60px; }
+        .col-ticket { width: 100px; }
+        .col-volume { width: 60px; }
+        .col-setor { width: 100px; }
 
-        /* Melhorias para legibilidade */
-        .table-scroll-container {
-            overflow-x: auto;
-            max-width: 100%;
-        }
-
-        .full-text {
-            white-space: normal;
-            word-wrap: break-word;
-            line-height: 1.4;
+        /* Melhorias para textos longos */
+        .compact-text {
+            font-size: 0.78rem;
+            line-height: 1.2;
         }
 
         .oficina-name {
             font-weight: 600;
             color: #2c3e50;
+            font-size: 0.78rem;
         }
 
         .ticket-value {
             font-weight: 600;
             color: #157f0d;
+            font-size: 0.78rem;
         }
 
-        @media (max-width: 1024px) {
+        .full-text {
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.2;
+        }
+
+        .nowrap-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 1200px) {
             .container {
                 max-width: 100%;
                 padding: 10px;
             }
             
-            .table-scroll-container {
-                font-size: 0.85rem;
-            }
+            /* Ajustes para telas menores mantendo sem scroll */
+            .col-posicao { width: 55px; }
+            .col-status { width: 65px; }
+            .col-oficina { width: 170px; }
+            .col-whatsapp { width: 100px; }
+            .col-endereco { width: 190px; }
+            .col-cidade { width: 110px; }
+            .col-cep { width: 85px; }
+            .col-distancia { width: 65px; }
+            .col-placas { width: 55px; }
+            .col-ticket { width: 95px; }
+            .col-volume { width: 55px; }
+            .col-setor { width: 95px; }
             
-            /* Ajustes para tablets */
-            .col-posicao { width: 60px; }
-            .col-status { width: 80px; }
-            .col-oficina { width: 180px; }
-            .col-whatsapp { width: 120px; }
-            .col-endereco { width: 200px; }
-            .col-cidade { width: 120px; }
-            .col-cep { width: 90px; }
-            .col-distancia { width: 70px; }
-            .col-placas { width: 60px; }
-            .col-ticket { width: 110px; }
-            .col-volume { width: 60px; }
-            .col-setor { width: 110px; }
+            th, td {
+                padding: 8px 6px;
+                font-size: 0.76rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -509,29 +523,13 @@
                 align-items: flex-start;
             }
             
-            /* Layout responsivo para mobile */
-            table {
-                table-layout: auto;
-                min-width: 800px;
-            }
-            
-            .table-scroll-container {
+            /* Para mobile, mantemos o layout compacto sem scroll horizontal */
+            .table-container {
                 overflow-x: auto;
             }
             
-            .col-posicao,
-            .col-status,
-            .col-oficina,
-            .col-whatsapp,
-            .col-endereco,
-            .col-cidade,
-            .col-cep,
-            .col-distancia,
-            .col-placas,
-            .col-ticket,
-            .col-volume,
-            .col-setor {
-                width: auto;
+            table {
+                min-width: 1000px;
             }
         }
     </style>
@@ -646,27 +644,25 @@
                         <div class="table-header">
                             <h3>🏆 Top 10 Melhores Oficinas</h3>
                         </div>
-                        <div class="table-scroll-container">
-                            <table id="resultTable">
-                                <thead>
-                                    <tr>
-                                        <th class="col-posicao">Posição</th>
-                                        <th class="col-status">Status</th>
-                                        <th class="col-oficina">Oficina</th>
-                                        <th class="col-whatsapp">WhatsApp</th>
-                                        <th class="col-endereco">Endereço</th>
-                                        <th class="col-cidade">Cidade</th>
-                                        <th class="col-cep">CEP</th>
-                                        <th class="col-distancia">Distância</th>
-                                        <th class="col-placas">Placas</th>
-                                        <th class="col-ticket">Ticket Médio</th>
-                                        <th class="col-volume">Volume</th>
-                                        <th class="col-setor">Setor</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                        <table id="resultTable">
+                            <thead>
+                                <tr>
+                                    <th class="col-posicao">Pos</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="col-oficina">Oficina</th>
+                                    <th class="col-whatsapp">WhatsApp</th>
+                                    <th class="col-endereco">Endereço</th>
+                                    <th class="col-cidade">Cidade</th>
+                                    <th class="col-cep">CEP</th>
+                                    <th class="col-distancia">Dist</th>
+                                    <th class="col-placas">Placas</th>
+                                    <th class="col-ticket">Ticket Médio</th>
+                                    <th class="col-volume">Vol</th>
+                                    <th class="col-setor">Setor</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -1094,7 +1090,7 @@
             .slice(0, 10);
         }
 
-        // Renderizar tabela - ATUALIZADA COM LARGURAS OTIMIZADAS
+        // Renderizar tabela - COMPACTADA PARA CABER SEM SCROLL
         function renderTable(rows, cidadeOrigem, totalRegistros, setorFiltro) {
             const table = el('resultTable');
             const tbody = table.querySelector('tbody');
@@ -1116,24 +1112,24 @@
                 
                 tr.innerHTML = `
                     <td class="col-posicao"><div class="position-badge">${index + 1}º</div></td>
-                    <td class="col-status">
+                    <td class="col-status compact-text">
                         <span class="status-indicator ${statusClass}" title="${statusText}"></span>
                         ${statusText}
                     </td>
-                    <td class="col-oficina full-text"><strong class="oficina-name">${escapeHtml(r.nome)}</strong></td>
-                    <td class="col-whatsapp">${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
-                    <td class="col-endereco full-text">${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
-                    <td class="col-cidade">${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}</td>
-                    <td class="col-cep">${escapeHtml(formatCep(r.cep))}</td>
+                    <td class="col-oficina compact-text"><strong class="oficina-name nowrap-text" title="${escapeHtml(r.nome)}">${escapeHtml(r.nome)}</strong></td>
+                    <td class="col-whatsapp compact-text nowrap-text" title="${escapeHtml(formatWhatsApp(r.whatsapp))}">${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
+                    <td class="col-endereco compact-text nowrap-text" title="${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}">${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
+                    <td class="col-cidade compact-text nowrap-text">${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}</td>
+                    <td class="col-cep compact-text">${escapeHtml(formatCep(r.cep))}</td>
                     <td class="col-distancia">
                         <a href="${mapsLink}" target="_blank" class="maps-link" title="Ver rota no Google Maps">
-                            🗺️ Rota
+                            🗺️
                         </a>
                     </td>
-                    <td class="col-placas">${r.qtdPlacas}</td>
-                    <td class="col-ticket"><strong class="ticket-value">${formatMoney(r.ticketMedio)}</strong></td>
-                    <td class="col-volume">${r.volume}</td>
-                    <td class="col-setor">${escapeHtml(r.setor)}</td>
+                    <td class="col-placas compact-text">${r.qtdPlacas}</td>
+                    <td class="col-ticket compact-text"><strong class="ticket-value">${formatMoney(r.ticketMedio)}</strong></td>
+                    <td class="col-volume compact-text">${r.volume}</td>
+                    <td class="col-setor compact-text nowrap-text" title="${escapeHtml(r.setor)}">${escapeHtml(r.setor)}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1197,14 +1193,14 @@
         function getSampleData() {
             return [
                 {"oficina_original":"EATECH INTERFACES","oficina_nome":"EATECH INTERFACES","whatsapp":"4132244800","endereco":"R TIBAGI","numero":"674","cidade":"CURITIBA","estado":"PR","cep":"80060110","placa":"ABC1D23","status_aprovacao":"APROVADO","valor_aprovado":"250.00","setor":"Multimarcas","status":"INATIVO"},
-                {"oficina_original":"OFICINA PARTICULAR","oficina_nome":"OFICINA PARTICULAR","whatsapp":"4135277760","endereco":"Rua Emanuel Kant","numero":"60","cidade":"CURITIBA","estado":"PR","cep":"81020670","placa":"XYZ9W87","status_aprovacao":"APROVADO","valor_aprovado":"36550.00","setor":"Movida","status":"ATIVO"},
-                {"oficina_original":"ATF TRANSMISSÃO","oficina_nome":"ATF TRANSMISSÃO ESPECIALIZADA","whatsapp":"4135383600","endereco":"R ANNE FRANK","numero":"3054","cidade":"CURITIBA","estado":"PR","cep":"81650020","placa":"DEF4G56","status_aprovacao":"APROVADO","valor_aprovado":"1175.00","setor":"Multimarcas","status":"INATIVO"},
-                {"oficina_original":"AUTO ELÉTRICA HABBY'S","oficina_nome":"AUTO ELÉTRICA HABBY'S","whatsapp":"4132759000","endereco":"RUA WALDEMAR LOURENÇO","numero":"123","cidade":"CURITIBA","estado":"PR","cep":"81830000","placa":"GHI7H89","status_aprovacao":"APROVADO","valor_aprovado":"3300.00","setor":"Multimarcas","status":"ATIVO"},
-                {"oficina_original":"FRASO CENTRO AUTOMOTIVO","oficina_nome":"FRASO CENTRO AUTOMOTIVO","whatsapp":"4130397550","endereco":"RUA JOSÉ HAUER","numero":"1234","cidade":"CURITIBA","estado":"PR","cep":"81730400","placa":"JKL0I12","status_aprovacao":"APROVADO","valor_aprovado":"1100.00","setor":"Movida","status":"ATIVO"},
-                {"oficina_original":"FRESSATTO CENTRO AUTOMOTIVO","oficina_nome":"FRESSATTO CENTRO AUTOMOTIVO","whatsapp":"4132962710","endereco":"R JOSE HAUER","numero":"103","cidade":"CURITIBA","estado":"PR","cep":"81580330","placa":"PQR6S78","status_aprovacao":"APROVADO","valor_aprovado":"13577.00","setor":"Movida","status":"ATIVO"},
+                {"oficina_original":"OFICINA PARTICULAR","oficina_nome":"OFICINA PARTICULAR","whatsapp":"4135277760","endereco":"Rua Emanuel Kant","numero":"60","cidade":"CURITIBA","estado":"PR","cep":"81020670","placa":"XYZ9W87","status_aprovacao":"APROVADO","valor_aprovado":"36550.00","setor":"Multimarcas","status":"ATIVO"},
+                {"oficina_original":"ATF TRANSMISSÃO","oficina_nome":"ATF TRANSMISSÃO AUTOMATICA E HIBRIDOS","whatsapp":"4135383600","endereco":"R ANNE FRANK","numero":"3054","cidade":"CURITIBA","estado":"PR","cep":"81650020","placa":"DEF4G56","status_aprovacao":"APROVADO","valor_aprovado":"1175.00","setor":"Multimarcas","status":"INATIVO"},
+                {"oficina_original":"AUTO ELETRICA HANG","oficina_nome":"AUTO ELETRICA HANG","whatsapp":"4132759000","endereco":"RUA WALDEMAR LOURENÇO","numero":"4595","cidade":"CURITIBA","estado":"PR","cep":"81830000","placa":"GHI7H89","status_aprovacao":"APROVADO","valor_aprovado":"3300.00","setor":"Multimarcas","status":"ATIVO"},
+                {"oficina_original":"FRASO CENTRO AUTOMOTIVO","oficina_nome":"FRASO CENTRO AUTOMOTIVO","whatsapp":"4130397550","endereco":"RUA JOSÉ HAUER","numero":"1207","cidade":"CURITIBA","estado":"PR","cep":"81730400","placa":"JKL0I12","status_aprovacao":"APROVADO","valor_aprovado":"1100.00","setor":"Multimarcas","status":"ATIVO"},
+                {"oficina_original":"FRESSATTO CENTRO AUTOMOTIVO","oficina_nome":"FRESSATTO CENTRO AUTOMOTIVO JOSE HAUER","whatsapp":"4132962710","endereco":"R JOSE HAUER","numero":"103","cidade":"CURITIBA","estado":"PR","cep":"81580330","placa":"PQR6S78","status_aprovacao":"APROVADO","valor_aprovado":"13577.00","setor":"Multimarcas","status":"ATIVO"},
                 {"oficina_original":"DERBA E LARA CENTRO AUTOMOTIVO","oficina_nome":"DERBA E LARA CENTRO AUTOMOTIVO","whatsapp":"4130924400","endereco":"R JOSÉ HAUER","numero":"1105","cidade":"CURITIBA","estado":"PR","cep":"81730400","placa":"STU9V01","status_aprovacao":"APROVADO","valor_aprovado":"3255.00","setor":"Multimarcas","status":"ATIVO"},
-                {"oficina_original":"GARAGE 92","oficina_nome":"GARAGE 92","whatsapp":"41985361234","endereco":"RODOVIA BR 116","numero":"KM 92","cidade":"CURITIBA","estado":"PR","cep":"82590400","placa":"VWX2Y34","status_aprovacao":"APROVADO","valor_aprovado":"23333.00","setor":"Movida","status":"ATIVO"},
-                {"oficina_original":"BIELLA CENTRO AUTOMOTIVO","oficina_nome":"BIELLA CENTRO AUTOMOTIVO","whatsapp":"4130395000","endereco":"R BARTOLOMEU LOURENÇO","numero":"456","cidade":"CURITIBA","estado":"PR","cep":"81610060","placa":"YZA5B67","status_aprovacao":"APROVADO","valor_aprovado":"61350.00","setor":"Multimarcas","status":"ATIVO"},
+                {"oficina_original":"GARAGE 92","oficina_nome":"GARAGE 92","whatsapp":"41985361234","endereco":"RODOVIA BR 116","numero":"KM 95","cidade":"CURITIBA","estado":"PR","cep":"82590400","placa":"VWX2Y34","status_aprovacao":"APROVADO","valor_aprovado":"23333.00","setor":"Multimarcas","status":"ATIVO"},
+                {"oficina_original":"BIELLA CENTRO AUTOMOTIVO","oficina_nome":"BIELLA CENTRO AUTOMOTIVO","whatsapp":"4130395000","endereco":"R BARTOLOMEU LOURENÇO","numero":"123","cidade":"CURITIBA","estado":"PR","cep":"81610060","placa":"YZA5B67","status_aprovacao":"APROVADO","valor_aprovado":"61350.00","setor":"Movida","status":"ATIVO"},
                 {"oficina_original":"FRESSATTO CENTRO AUTOMOTIVO","oficina_nome":"FRESSATTO CENTRO AUTOMOTIVO","whatsapp":"4130952712","endereco":"AV SENADOR SALGADO FILHO","numero":"789","cidade":"CURITIBA","estado":"PR","cep":"81580000","placa":"MNO3P45","status_aprovacao":"APROVADO","valor_aprovado":"46384.00","setor":"Movida","status":"ATIVO"}
             ];
         }
