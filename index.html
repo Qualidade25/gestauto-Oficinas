@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GestAuto Brasil - Busca de Oficinas</title>
+    <title>Gestauto - Busca de Oficinas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -139,6 +139,27 @@
             border-color: #157f0d;
             background: white;
             box-shadow: 0 0 0 3px rgba(21, 127, 13, 0.1);
+        }
+
+        .form-control:read-only {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .cep-maps-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 8px;
+            color: #157f0d;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .cep-maps-link:hover {
+            text-decoration: underline;
         }
 
         .btn {
@@ -294,9 +315,10 @@
             color: #2c3e50;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
+            white-space: normal;
             vertical-align: top;
             line-height: 1.3;
+            word-wrap: break-word;
         }
 
         tbody tr:hover {
@@ -437,7 +459,7 @@
         /* LARGURAS OTIMIZADAS PARA VISUALIZAÇÃO COMPLETA SEM SCROLL */
         .col-posicao { width: 60px; }
         .col-status { width: 70px; }
-        .col-oficina { width: 180px; }
+        .col-oficina { width: 200px; }
         .col-whatsapp { width: 110px; }
         .col-endereco { width: 200px; }
         .col-cidade { width: 120px; }
@@ -603,6 +625,48 @@
             font-size: 0.7rem;
         }
 
+        /* NOVAS CORREÇÕES PARA QUEBRA DE TEXTO E AJUSTE AUTOMÁTICO */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table-responsive table {
+            min-width: 1200px;
+        }
+
+        .text-wrap {
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .text-truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .col-endereco, .col-oficina, .col-setor {
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        .col-endereco {
+            min-width: 200px;
+        }
+
+        .col-oficina {
+            min-width: 180px;
+        }
+
+        .col-setor {
+            min-width: 100px;
+        }
+
+        .col-cidade {
+            min-width: 120px;
+        }
+
         @media (max-width: 1200px) {
             .container {
                 max-width: 100%;
@@ -612,7 +676,7 @@
             /* Ajustes para telas menores mantendo sem scroll */
             .col-posicao { width: 55px; }
             .col-status { width: 65px; }
-            .col-oficina { width: 170px; }
+            .col-oficina { width: 200px; }
             .col-whatsapp { width: 100px; }
             .col-endereco { width: 190px; }
             .col-cidade { width: 110px; }
@@ -659,11 +723,11 @@
             }
             
             /* Para mobile, mantemos o layout compacto sem scroll horizontal */
-            .table-container {
+            .table-responsive {
                 overflow-x: auto;
             }
             
-            table {
+            .table-responsive table {
                 min-width: 1000px;
             }
 
@@ -683,7 +747,7 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="logo">GestAuto<span>Brasil</span></div>
+            <div class="logo">Gestauto<span>Oficinas</span></div>
             <div class="subtitle">Sistema Inteligente de Busca de Oficinas</div>
         </div>
 
@@ -727,12 +791,17 @@
                     <div class="form-group">
                         <label for="cepInput">📍 CEP de Origem</label>
                         <input type="text" id="cepInput" class="form-control" placeholder="Ex: 01311-000">
+                        <!-- Link para visualização do CEP no Google Maps -->
+                        <a href="#" id="cepMapsLink" class="cep-maps-link" target="_blank" style="display: none;">
+                            <span>🗺️ Ver localização no Google Maps</span>
+                        </a>
                     </div>
                     
                     <div class="form-group">
                         <label for="sheetUrl">🔗 URL da Planilha</label>
                         <input type="url" id="sheetUrl" class="form-control" 
-                               value="https://docs.google.com/spreadsheets/d/e/2PACX-1vRzl3PdvxEtsEDFBqGf02U9MApfktgc2LWfcq5pXzpGKu6D4wxpfg9AEdMppbMCx2cQjkvPOMEivlns/pubhtml">
+                               value="https://docs.google.com/spreadsheets/d/e/2PACX-1vRzl3PdvxEtsEDFBqGf02U9MApfktgc2LWfcq5pXzpGKu6D4wxpfg9AEdMppbMCx2cQjkvPOMEivlns/pubhtml"
+                               readonly>
                     </div>
                 </div>
 
@@ -789,25 +858,27 @@
                         <div class="table-header">
                             <h3>🏆 Top 10 Melhores Oficinas</h3>
                         </div>
-                        <table id="resultTable">
-                            <thead>
-                                <tr>
-                                    <th class="col-posicao">Pos</th>
-                                    <th class="col-status">Status</th>
-                                    <th class="col-oficina">Oficina</th>
-                                    <th class="col-whatsapp">WhatsApp</th>
-                                    <th class="col-endereco">Endereço</th>
-                                    <th class="col-cidade">Cidade</th>
-                                    <th class="col-cep">CEP</th>
-                                    <th class="col-distancia">Dist</th>
-                                    <th class="col-placas">Placas</th>
-                                    <th class="col-ticket">Ticket Médio</th>
-                                    <th class="col-volume">Vol</th>
-                                    <th class="col-setor">Setor</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="resultTable">
+                                <thead>
+                                    <tr>
+                                        <th class="col-posicao">Pos</th>
+                                        <th class="col-status">Status</th>
+                                        <th class="col-oficina">Oficina</th>
+                                        <th class="col-whatsapp">WhatsApp</th>
+                                        <th class="col-endereco">Endereço</th>
+                                        <th class="col-cidade">Cidade</th>
+                                        <th class="col-cep">CEP</th>
+                                        <th class="col-distancia">Dist</th>
+                                        <th class="col-placas">Placas</th>
+                                        <th class="col-ticket">Ticket Médio</th>
+                                        <th class="col-volume">Vol</th>
+                                        <th class="col-setor">Setor</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -855,6 +926,8 @@
             updateStatus('Pronto. Insira o CEP de origem e clique em Buscar Top 10.', 'default');
             el('errorBox').innerHTML = '';
             currentRows = [];
+            // Esconder link do mapa ao limpar
+            el('cepMapsLink').style.display = 'none';
         });
 
         // Filtro por setor
@@ -864,6 +937,18 @@
                 setTimeout(() => {
                     processRows(currentRows, currentCepOrigem, currentCidadeOrigem);
                 }, 100);
+            }
+        });
+
+        // Atualizar link do Google Maps quando o CEP for alterado
+        el('cepInput').addEventListener('input', (e) => {
+            const cepRaw = (e.target.value || '').replace(/\D/g,'');
+            if (cepRaw.length >= 8) {
+                const cepFormatado = cepRaw.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+                el('cepMapsLink').href = `https://www.google.com/maps/search/?api=1&query=${cepFormatado}`;
+                el('cepMapsLink').style.display = 'inline-flex';
+            } else {
+                el('cepMapsLink').style.display = 'none';
             }
         });
 
@@ -1269,15 +1354,15 @@
                         <span class="status-indicator ${statusClass}" title="${statusText}"></span>
                         ${statusText}
                     </td>
-                    <td class="col-oficina compact-text">
+                    <td class="col-oficina compact-text text-wrap">
                         <div class="oficina-completa">
-                            <strong class="oficina-name nowrap-text">${escapeHtml(r.nome)}</strong>
+                            <strong class="oficina-name">${escapeHtml(r.nome)}</strong>
                             ${especialidadesHTML}
                         </div>
                     </td>
-                    <td class="col-whatsapp compact-text nowrap-text">${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
-                    <td class="col-endereco compact-text nowrap-text">${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
-                    <td class="col-cidade compact-text nowrap-text">${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}</td>
+                    <td class="col-whatsapp compact-text text-wrap">${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
+                    <td class="col-endereco compact-text text-wrap">${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
+                    <td class="col-cidade compact-text text-wrap">${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}</td>
                     <td class="col-cep compact-text">${escapeHtml(formatCep(r.cep))}</td>
                     <td class="col-distancia">
                         <a href="${mapsLink}" target="_blank" class="maps-link" title="Ver rota no Google Maps">
@@ -1287,7 +1372,7 @@
                     <td class="col-placas compact-text">${r.qtdPlacas}</td>
                     <td class="col-ticket compact-text"><strong class="ticket-value">${formatMoney(r.ticketMedio)}</strong></td>
                     <td class="col-volume compact-text">${r.volume}</td>
-                    <td class="col-setor compact-text nowrap-text">${escapeHtml(r.setor)}</td>
+                    <td class="col-setor compact-text text-wrap">${escapeHtml(r.setor)}</td>
                 `;
                 tbody.appendChild(tr);
             });
