@@ -294,9 +294,10 @@
             color: #2c3e50;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
+            white-space: normal;
             vertical-align: top;
             line-height: 1.3;
+            word-wrap: break-word;
         }
 
         tbody tr:hover {
@@ -603,6 +604,48 @@
             font-size: 0.7rem;
         }
 
+        /* NOVAS CORREÇÕES PARA QUEBRA DE TEXTO E AJUSTE AUTOMÁTICO */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table-responsive table {
+            min-width: 1200px;
+        }
+
+        .text-wrap {
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .text-truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .col-endereco, .col-oficina, .col-setor {
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        .col-endereco {
+            min-width: 200px;
+        }
+
+        .col-oficina {
+            min-width: 180px;
+        }
+
+        .col-setor {
+            min-width: 100px;
+        }
+
+        .col-cidade {
+            min-width: 120px;
+        }
+
         @media (max-width: 1200px) {
             .container {
                 max-width: 100%;
@@ -659,11 +702,11 @@
             }
             
             /* Para mobile, mantemos o layout compacto sem scroll horizontal */
-            .table-container {
+            .table-responsive {
                 overflow-x: auto;
             }
             
-            table {
+            .table-responsive table {
                 min-width: 1000px;
             }
 
@@ -789,25 +832,27 @@
                         <div class="table-header">
                             <h3>🏆 Top 10 Melhores Oficinas</h3>
                         </div>
-                        <table id="resultTable">
-                            <thead>
-                                <tr>
-                                    <th class="col-posicao">Pos</th>
-                                    <th class="col-status">Status</th>
-                                    <th class="col-oficina">Oficina</th>
-                                    <th class="col-whatsapp">WhatsApp</th>
-                                    <th class="col-endereco">Endereço</th>
-                                    <th class="col-cidade">Cidade</th>
-                                    <th class="col-cep">CEP</th>
-                                    <th class="col-distancia">Dist</th>
-                                    <th class="col-placas">Placas</th>
-                                    <th class="col-ticket">Ticket Médio</th>
-                                    <th class="col-volume">Vol</th>
-                                    <th class="col-setor">Setor</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="resultTable">
+                                <thead>
+                                    <tr>
+                                        <th class="col-posicao">Pos</th>
+                                        <th class="col-status">Status</th>
+                                        <th class="col-oficina">Oficina</th>
+                                        <th class="col-whatsapp">WhatsApp</th>
+                                        <th class="col-endereco">Endereço</th>
+                                        <th class="col-cidade">Cidade</th>
+                                        <th class="col-cep">CEP</th>
+                                        <th class="col-distancia">Dist</th>
+                                        <th class="col-placas">Placas</th>
+                                        <th class="col-ticket">Ticket Médio</th>
+                                        <th class="col-volume">Vol</th>
+                                        <th class="col-setor">Setor</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1269,15 +1314,15 @@
                         <span class="status-indicator ${statusClass}" title="${statusText}"></span>
                         ${statusText}
                     </td>
-                    <td class="col-oficina compact-text">
+                    <td class="col-oficina compact-text text-wrap">
                         <div class="oficina-completa">
-                            <strong class="oficina-name nowrap-text">${escapeHtml(r.nome)}</strong>
+                            <strong class="oficina-name">${escapeHtml(r.nome)}</strong>
                             ${especialidadesHTML}
                         </div>
                     </td>
-                    <td class="col-whatsapp compact-text nowrap-text">${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
-                    <td class="col-endereco compact-text nowrap-text">${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
-                    <td class="col-cidade compact-text nowrap-text">${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}</td>
+                    <td class="col-whatsapp compact-text text-wrap">${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
+                    <td class="col-endereco compact-text text-wrap">${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
+                    <td class="col-cidade compact-text text-wrap">${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}</td>
                     <td class="col-cep compact-text">${escapeHtml(formatCep(r.cep))}</td>
                     <td class="col-distancia">
                         <a href="${mapsLink}" target="_blank" class="maps-link" title="Ver rota no Google Maps">
@@ -1287,7 +1332,7 @@
                     <td class="col-placas compact-text">${r.qtdPlacas}</td>
                     <td class="col-ticket compact-text"><strong class="ticket-value">${formatMoney(r.ticketMedio)}</strong></td>
                     <td class="col-volume compact-text">${r.volume}</td>
-                    <td class="col-setor compact-text nowrap-text">${escapeHtml(r.setor)}</td>
+                    <td class="col-setor compact-text text-wrap">${escapeHtml(r.setor)}</td>
                 `;
                 tbody.appendChild(tr);
             });
