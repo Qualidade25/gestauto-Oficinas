@@ -250,7 +250,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
             overflow: hidden;
             margin-top: 20px;
-            position: relative;
         }
 
         .table-header {
@@ -459,8 +458,8 @@
             font-weight: 600;
             color: #2c3e50;
             font-size: 0.78rem;
-            cursor: help;
-            position: relative;
+            margin-bottom: 4px;
+            display: block;
         }
 
         .ticket-value {
@@ -481,99 +480,127 @@
             text-overflow: ellipsis;
         }
 
-        /* NOVO: Tooltip para valores da coluna AP */
-        .tooltip {
-            position: relative;
+        /* CORREÇÃO: ESPECIALIDADES USANDO TODA A EXTENSÃO DA LINHA */
+        .especialidades-linha-completa {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+            width: 100%;
+            min-height: 24px;
+            align-items: center;
+        }
+
+        .especialidade-badge {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            color: #155724;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            border: 1px solid #c3e6cb;
+            white-space: nowrap;
+            line-height: 1.2;
+            flex-shrink: 0;
+            max-width: 100%;
+        }
+
+        .especialidade-badge::before {
+            content: "•";
+            color: #157f0d;
+            font-weight: bold;
+            margin-right: 4px;
+            font-size: 0.8rem;
+        }
+
+        .especialidade-badge-destaque {
+            background: linear-gradient(135deg, #157f0d, #105f0a);
+            color: white;
+            border: 1px solid #0b8006;
+        }
+
+        .especialidade-badge-destaque::before {
+            color: #ffd700;
+        }
+
+        .sem-especialidades {
+            color: #6c757d;
+            font-style: italic;
+            font-size: 0.7rem;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px dashed #dee2e6;
             display: inline-block;
         }
 
-        .tooltip-content {
-            visibility: hidden;
-            width: 300px;
-            background-color: #2c3e50;
-            color: white;
-            text-align: left;
-            border-radius: 12px;
-            padding: 15px;
-            position: absolute;
-            z-index: 1000;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            font-size: 0.8rem;
-            line-height: 1.4;
+        /* NOVO: Container que expande para usar toda a largura disponível */
+        .oficina-completa {
+            width: 100%;
+            min-height: 50px;
         }
 
-        .tooltip-content::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #2c3e50 transparent transparent transparent;
-        }
-
-        .tooltip:hover .tooltip-content {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .tooltip-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #ffd700;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #4a6572;
-            padding-bottom: 5px;
-        }
-
-        .valores-lista {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .valor-item {
+        .especialidades-expandidas {
+            width: 100%;
             display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
-            padding: 4px 0;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-top: 3px;
+            padding: 2px 0;
         }
 
-        .valor-bullet {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
+        .especialidade-compacta {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #495057;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: 500;
+            border: 1px solid #dee2e6;
+            white-space: nowrap;
+            line-height: 1.1;
             flex-shrink: 0;
         }
 
-        .bullet-1 { background-color: #3498db; }
-        .bullet-2 { background-color: #e74c3c; }
-        .bullet-3 { background-color: #2ecc71; }
-        .bullet-4 { background-color: #f39c12; }
-        .bullet-5 { background-color: #9b59b6; }
-        .bullet-6 { background-color: #1abc9c; }
-        .bullet-7 { background-color: #d35400; }
-        .bullet-8 { background-color: #34495e; }
-        .bullet-9 { background-color: #7f8c8d; }
-        .bullet-10 { background-color: #27ae60; }
-
-        .valor-texto {
-            flex: 1;
-            word-wrap: break-word;
+        .especialidade-compacta::before {
+            content: "▸";
+            color: #157f0d;
+            font-weight: bold;
+            margin-right: 3px;
+            font-size: 0.55rem;
         }
 
-        .sem-valores {
-            color: #bdc3c7;
-            font-style: italic;
-            text-align: center;
-            padding: 10px 0;
+        .especialidade-destaque {
+            background: linear-gradient(135deg, #157f0d, #105f0a);
+            color: white;
+            border: 1px solid #0b8006;
+        }
+
+        .especialidade-destaque::before {
+            color: #ffd700;
+        }
+
+        .container-especialidades {
+            width: 100%;
+            max-height: 35px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container-especialidades.muitas::after {
+            content: "+";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: white;
+            padding: 0 4px;
+            color: #157f0d;
+            font-weight: bold;
+            font-size: 0.7rem;
         }
 
         @media (max-width: 1200px) {
@@ -601,8 +628,14 @@
                 font-size: 0.76rem;
             }
 
-            .tooltip-content {
-                width: 250px;
+            .especialidade-badge {
+                font-size: 0.62rem;
+                padding: 1px 6px;
+            }
+
+            .especialidade-compacta {
+                font-size: 0.58rem;
+                padding: 1px 5px;
             }
         }
 
@@ -634,9 +667,14 @@
                 min-width: 1000px;
             }
 
-            .tooltip-content {
-                width: 200px;
-                font-size: 0.75rem;
+            .especialidade-badge {
+                font-size: 0.6rem;
+                padding: 1px 5px;
+            }
+
+            .especialidade-compacta {
+                font-size: 0.56rem;
+                padding: 1px 4px;
             }
         }
     </style>
@@ -1071,7 +1109,7 @@
                         placas: new Set(), 
                         setores: new Set(), 
                         status: new Set(),
-                        observacoes: new Set(), // NOVO: Armazenar observações da coluna AP
+                        observacoes: new Set(), // Armazenar observações da coluna AP
                         setor
                     });
                 }
@@ -1086,7 +1124,7 @@
                 if (placa) off.placas.add(placa);
                 if (setor) off.setores.add(setor);
                 if (status) off.status.add(status);
-                if (observacoes) off.observacoes.add(observacoes); // NOVO: Adicionar observação
+                if (observacoes) off.observacoes.add(observacoes); // Adicionar observação
                 if (!off.cep && cep) off.cep = cep;
                 if (!off.cidade && cidade) off.cidade = cidade;
                 if (!off.estado && estado) off.estado = estado;
@@ -1123,7 +1161,7 @@
                     qtdPlacas: qtdPlacasDistintas,
                     valorTotal: valorTotal,
                     ticketMedio: ticketMedio,
-                    observacoes: Array.from(o.observacoes), // NOVO: Array de observações
+                    observacoes: Array.from(o.observacoes), // Array de observações
                     valoresValidos: valoresValidos.length // Para debug
                 };
             });
@@ -1202,7 +1240,7 @@
             .slice(0, 10);
         }
 
-        // Renderizar tabela - COMPACTADA PARA CABER SEM SCROLL COM TOOLTIP
+        // Renderizar tabela - COM ESPECIALIDADES USANDO TODA A EXTENSÃO
         function renderTable(rows, cidadeOrigem, totalRegistros, setorFiltro) {
             const table = el('resultTable');
             const tbody = table.querySelector('tbody');
@@ -1222,8 +1260,8 @@
                 const statusText = r.status === 'ATIVO' ? 'ATIVO' : 
                                  r.status === 'INATIVO' ? 'INATIVO' : 'INDEFINIDO';
                 
-                // NOVO: Gerar tooltip com observações da coluna AP
-                const tooltipContent = gerarTooltipObservacoes(r.observacoes, r.nome);
+                // Gerar visualização expandida das especialidades
+                const especialidadesHTML = gerarEspecialidadesExpandidas(r.observacoes);
                 
                 tr.innerHTML = `
                     <td class="col-posicao"><div class="position-badge">${index + 1}º</div></td>
@@ -1232,13 +1270,13 @@
                         ${statusText}
                     </td>
                     <td class="col-oficina compact-text">
-                        <div class="tooltip">
+                        <div class="oficina-completa">
                             <strong class="oficina-name nowrap-text">${escapeHtml(r.nome)}</strong>
-                            ${tooltipContent}
+                            ${especialidadesHTML}
                         </div>
                     </td>
-                    <td class="col-whatsapp compact-text nowrap-text" title="${escapeHtml(formatWhatsApp(r.whatsapp))}">${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
-                    <td class="col-endereco compact-text nowrap-text" title="${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}">${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
+                    <td class="col-whatsapp compact-text nowrap-text">${escapeHtml(formatWhatsApp(r.whatsapp))}</td>
+                    <td class="col-endereco compact-text nowrap-text">${escapeHtml(r.endereco)} ${escapeHtml(r.numero)}</td>
                     <td class="col-cidade compact-text nowrap-text">${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}</td>
                     <td class="col-cep compact-text">${escapeHtml(formatCep(r.cep))}</td>
                     <td class="col-distancia">
@@ -1249,7 +1287,7 @@
                     <td class="col-placas compact-text">${r.qtdPlacas}</td>
                     <td class="col-ticket compact-text"><strong class="ticket-value">${formatMoney(r.ticketMedio)}</strong></td>
                     <td class="col-volume compact-text">${r.volume}</td>
-                    <td class="col-setor compact-text nowrap-text" title="${escapeHtml(r.setor)}">${escapeHtml(r.setor)}</td>
+                    <td class="col-setor compact-text nowrap-text">${escapeHtml(r.setor)}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1265,13 +1303,12 @@
             updateStatus(`<span class="success-text">✅ Busca concluída! ${rows.length} oficinas encontradas em ${cidadeOrigem}</span>`, 'success');
         }
 
-        // NOVA FUNÇÃO: Gerar tooltip com observações da coluna AP
-        function gerarTooltipObservacoes(observacoes, nomeOficina) {
+        // NOVA FUNÇÃO: Gerar especialidades usando toda a extensão disponível
+        function gerarEspecialidadesExpandidas(observacoes) {
             if (!observacoes || observacoes.length === 0 || (observacoes.length === 1 && !observacoes[0])) {
                 return `
-                    <div class="tooltip-content">
-                        <div class="tooltip-title">${escapeHtml(nomeOficina)}</div>
-                        <div class="sem-valores">Nenhuma observação registrada</div>
+                    <div class="especialidades-expandidas">
+                        <span class="sem-especialidades">Sem especialidades registradas</span>
                     </div>
                 `;
             }
@@ -1280,29 +1317,26 @@
             
             if (observacoesFiltradas.length === 0) {
                 return `
-                    <div class="tooltip-content">
-                        <div class="tooltip-title">${escapeHtml(nomeOficina)}</div>
-                        <div class="sem-valores">Nenhuma observação registrada</div>
+                    <div class="especialidades-expandidas">
+                        <span class="sem-especialidades">Sem especialidades registradas</span>
                     </div>
                 `;
             }
 
-            const itensObservacoes = observacoesFiltradas.map((obs, index) => {
-                const bulletClass = `bullet-${(index % 10) + 1}`;
-                return `
-                    <li class="valor-item">
-                        <span class="valor-bullet ${bulletClass}"></span>
-                        <span class="valor-texto">${escapeHtml(obs)}</span>
-                    </li>
-                `;
+            const badgesEspecialidades = observacoesFiltradas.map((obs, index) => {
+                // Destacar as primeiras 3 especialidades
+                const classeDestaque = index < 3 ? 'especialidade-destaque' : '';
+                return `<span class="especialidade-compacta ${classeDestaque}">${escapeHtml(obs)}</span>`;
             }).join('');
 
+            // Adicionar classe se tiver muitas especialidades
+            const classeContainer = observacoesFiltradas.length > 6 ? 'muitas' : '';
+
             return `
-                <div class="tooltip-content">
-                    <div class="tooltip-title">${escapeHtml(nomeOficina)} - Observações</div>
-                    <ul class="valores-lista">
-                        ${itensObservacoes}
-                    </ul>
+                <div class="container-especialidades ${classeContainer}">
+                    <div class="especialidades-expandidas">
+                        ${badgesEspecialidades}
+                    </div>
                 </div>
             `;
         }
@@ -1354,16 +1388,16 @@
         // Dados de exemplo ATUALIZADOS com status, status_aprovacao e observacoes (coluna AP)
         function getSampleData() {
             return [
-                {"oficina_original":"EATECH INTERFACES","oficina_nome":"EATECH INTERFACES","whatsapp":"4132244800","endereco":"R TIBAGI","numero":"674","cidade":"CURITIBA","estado":"PR","cep":"80060110","placa":"ABC1D23","status_aprovacao":"APROVADO","valor_aprovado":"250.00","setor":"Multimarcas","status":"INATIVO","observacoes":"Especializada em interfaces eletrônicas"},
-                {"oficina_original":"OFICINA PARTICULAR","oficina_nome":"OFICINA PARTICULAR","whatsapp":"4135277760","endereco":"Rua Emanuel Kant","numero":"60","cidade":"CURITIBA","estado":"PR","cep":"81020670","placa":"XYZ9W87","status_aprovacao":"APROVADO","valor_aprovado":"36550.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Atendimento personalizado|Serviços rápidos|Orçamento sem compromisso"},
-                {"oficina_original":"ATF TRANSMISSÃO","oficina_nome":"ATF TRANSMISSÃO AUTOMATICA E HIBRIDOS","whatsapp":"4135383600","endereco":"R ANNE FRANK","numero":"3054","cidade":"CURITIBA","estado":"PR","cep":"81650020","placa":"DEF4G56","status_aprovacao":"APROVADO","valor_aprovado":"1175.00","setor":"Multimarcas","status":"INATIVO","observacoes":"Especializada em transmissão automática"},
-                {"oficina_original":"AUTO ELETRICA HANG","oficina_nome":"AUTO ELETRICA HANG","whatsapp":"4132759000","endereco":"RUA WALDEMAR LOURENÇO","numero":"4595","cidade":"CURITIBA","estado":"PR","cep":"81830000","placa":"GHI7H89","status_aprovacao":"APROVADO","valor_aprovado":"3300.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Instalação de som|Reparo elétrico completo|Diagnóstico computadorizado"},
-                {"oficina_original":"FRASO CENTRO AUTOMOTIVO","oficina_nome":"FRASO CENTRO AUTOMOTIVO","whatsapp":"4130397550","endereco":"RUA JOSÉ HAUER","numero":"1207","cidade":"CURITIBA","estado":"PR","cep":"81730400","placa":"JKL0I12","status_aprovacao":"APROVADO","valor_aprovado":"1100.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Centro automotivo completo|Mecânica geral|Funilaria e pintura"},
-                {"oficina_original":"FRESSATTO CENTRO AUTOMOTIVO","oficina_nome":"FRESSATTO CENTRO AUTOMOTIVO JOSE HAUER","whatsapp":"4132962710","endereco":"R JOSE HAUER","numero":"103","cidade":"CURITIBA","estado":"PR","cep":"81580330","placa":"PQR6S78","status_aprovacao":"APROVADO","valor_aprovado":"13577.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Atendimento premium|Garantia de 90 dias|Peças originais"},
-                {"oficina_original":"DERBA E LARA CENTRO AUTOMOTIVO","oficina_nome":"DERBA E LARA CENTRO AUTOMOTIVO","whatsapp":"4130924400","endereco":"R JOSÉ HAUER","numero":"1105","cidade":"CURITIBA","estado":"PR","cep":"81730400","placa":"STU9V01","status_aprovacao":"APROVADO","valor_aprovado":"3255.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Família no ramo há 20 anos|Serviços especializados|Atendimento diferenciado"},
-                {"oficina_original":"GARAGE 92","oficina_nome":"GARAGE 92","whatsapp":"41985361234","endereco":"RODOVIA BR 116","numero":"KM 95","cidade":"CURITIBA","estado":"PR","cep":"82590400","placa":"VWX2Y34","status_aprovacao":"APROVADO","valor_aprovado":"23333.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Localização estratégica|Atendimento 24h|Serviços emergenciais"},
-                {"oficina_original":"BIELLA CENTRO AUTOMOTIVO","oficina_nome":"BIELLA CENTRO AUTOMOTIVO","whatsapp":"4130395000","endereco":"R BARTOLOMEU LOURENÇO","numero":"123","cidade":"CURITIBA","estado":"PR","cep":"81610060","placa":"YZA5B67","status_aprovacao":"APROVADO","valor_aprovado":"61350.00","setor":"Movida","status":"ATIVO","observacoes":"Parceria com seguradoras|Serviços especializados|Atendimento corporativo"},
-                {"oficina_original":"FRESSATTO CENTRO AUTOMOTIVO","oficina_nome":"FRESSATTO CENTRO AUTOMOTIVO","whatsapp":"4130952712","endereco":"AV SENADOR SALGADO FILHO","numero":"789","cidade":"CURITIBA","estado":"PR","cep":"81580000","placa":"MNO3P45","status_aprovacao":"APROVADO","valor_aprovado":"46384.00","setor":"Movida","status":"ATIVO","observacoes":"Rede credenciada|Multi-marcas|Serviços completos"}
+                {"oficina_original":"EATECH INTERFACES","oficina_nome":"EATECH INTERFACES","whatsapp":"4132244800","endereco":"R TIBAGI","numero":"674","cidade":"CURITIBA","estado":"PR","cep":"80060110","placa":"ABC1D23","status_aprovacao":"APROVADO","valor_aprovado":"250.00","setor":"Multimarcas","status":"INATIVO","observacoes":"Interfaces eletrônicas|Sistemas embarcados|Diagnóstico digital"},
+                {"oficina_original":"OFICINA PARTICULAR","oficina_nome":"OFICINA PARTICULAR","whatsapp":"4135277760","endereco":"Rua Emanuel Kant","numero":"60","cidade":"CURITIBA","estado":"PR","cep":"81020670","placa":"XYZ9W87","status_aprovacao":"APROVADO","valor_aprovado":"36550.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Atendimento personalizado|Serviços rápidos|Orçamento sem compromisso|Manutenção preventiva|Troca de óleo|Alinhamento"},
+                {"oficina_original":"ATF TRANSMISSÃO","oficina_nome":"ATF TRANSMISSÃO AUTOMATICA E HIBRIDOS","whatsapp":"4135383600","endereco":"R ANNE FRANK","numero":"3054","cidade":"CURITIBA","estado":"PR","cep":"81650020","placa":"DEF4G56","status_aprovacao":"APROVADO","valor_aprovado":"1175.00","setor":"Multimarcas","status":"INATIVO","observacoes":"Transmissão automática|Sistemas híbridos|Troca de fluido|Reparo de conversor"},
+                {"oficina_original":"AUTO ELETRICA HANG","oficina_nome":"AUTO ELETRICA HANG","whatsapp":"4132759000","endereco":"RUA WALDEMAR LOURENÇO","numero":"4595","cidade":"CURITIBA","estado":"PR","cep":"81830000","placa":"GHI7H89","status_aprovacao":"APROVADO","valor_aprovado":"3300.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Instalação de som|Reparo elétrico|Diagnóstico|Alternador|Partida|Injeção eletrônica|Baterias"},
+                {"oficina_original":"FRASO CENTRO AUTOMOTIVO","oficina_nome":"FRASO CENTRO AUTOMOTIVO","whatsapp":"4130397550","endereco":"RUA JOSÉ HAUER","numero":"1207","cidade":"CURITIBA","estado":"PR","cep":"81730400","placa":"JKL0I12","status_aprovacao":"APROVADO","valor_aprovado":"1100.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Centro automotivo|Mecânica|Funilaria|Pintura|Suspensão|Freios|Motor"},
+                {"oficina_original":"FRESSATTO CENTRO AUTOMOTIVO","oficina_nome":"FRESSATTO CENTRO AUTOMOTIVO JOSE HAUER","whatsapp":"4132962710","endereco":"R JOSE HAUER","numero":"103","cidade":"CURITIBA","estado":"PR","cep":"81580330","placa":"PQR6S78","status_aprovacao":"APROVADO","valor_aprovado":"13577.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Atendimento premium|Garantia|Peças originais|Revisão programada|Lavagem|Polimento"},
+                {"oficina_original":"DERBA E LARA CENTRO AUTOMOTIVO","oficina_nome":"DERBA E LARA CENTRO AUTOMOTIVO","whatsapp":"4130924400","endereco":"R JOSÉ HAUER","numero":"1105","cidade":"CURITIBA","estado":"PR","cep":"81730400","placa":"STU9V01","status_aprovacao":"APROVADO","valor_aprovado":"3255.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Família 20 anos|Serviços especializados|Atendimento|Mecânica|Elétrica|Funilaria"},
+                {"oficina_original":"GARAGE 92","oficina_nome":"GARAGE 92","whatsapp":"41985361234","endereco":"RODOVIA BR 116","numero":"KM 95","cidade":"CURITIBA","estado":"PR","cep":"82590400","placa":"VWX2Y34","status_aprovacao":"APROVADO","valor_aprovado":"23333.00","setor":"Multimarcas","status":"ATIVO","observacoes":"Localização|Atendimento 24h|Emergencial|Guincho|Pneu|Bateria|Combustível"},
+                {"oficina_original":"BIELLA CENTRO AUTOMOTIVO","oficina_nome":"BIELLA CENTRO AUTOMOTIVO","whatsapp":"4130395000","endereco":"R BARTOLOMEU LOURENÇO","numero":"123","cidade":"CURITIBA","estado":"PR","cep":"81610060","placa":"YZA5B67","status_aprovacao":"APROVADO","valor_aprovado":"61350.00","setor":"Movida","status":"ATIVO","observacoes":"Seguradoras|Serviços especializados|Corporativo|Frota|Manutenção|Vistoria"},
+                {"oficina_original":"FRESSATTO CENTRO AUTOMOTIVO","oficina_nome":"FRESSATTO CENTRO AUTOMOTIVO","whatsapp":"4130952712","endereco":"AV SENADOR SALGADO FILHO","numero":"789","cidade":"CURITIBA","estado":"PR","cep":"81580000","placa":"MNO3P45","status_aprovacao":"APROVADO","valor_aprovado":"46384.00","setor":"Movida","status":"ATIVO","observacoes":"Rede credenciada|Multi-marcas|Completo|Revisão|Manutenção|Conserto"}
             ];
         }
     </script>
