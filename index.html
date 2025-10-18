@@ -141,6 +141,27 @@
             box-shadow: 0 0 0 3px rgba(21, 127, 13, 0.1);
         }
 
+        .form-control:read-only {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .cep-maps-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 8px;
+            color: #157f0d;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .cep-maps-link:hover {
+            text-decoration: underline;
+        }
+
         .btn {
             padding: 12px 30px;
             border: none;
@@ -726,7 +747,7 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="logo">GestAuto<span>Brasil</span></div>
+            <div class="logo">Gestauto<span>Oficinas</span></div>
             <div class="subtitle">Sistema Inteligente de Busca de Oficinas</div>
         </div>
 
@@ -770,12 +791,17 @@
                     <div class="form-group">
                         <label for="cepInput">📍 CEP de Origem</label>
                         <input type="text" id="cepInput" class="form-control" placeholder="Ex: 01311-000">
+                        <!-- Link para visualização do CEP no Google Maps -->
+                        <a href="#" id="cepMapsLink" class="cep-maps-link" target="_blank" style="display: none;">
+                            <span>🗺️ Ver localização no Google Maps</span>
+                        </a>
                     </div>
                     
                     <div class="form-group">
                         <label for="sheetUrl">🔗 URL da Planilha</label>
                         <input type="url" id="sheetUrl" class="form-control" 
-                               value="https://docs.google.com/spreadsheets/d/e/2PACX-1vRzl3PdvxEtsEDFBqGf02U9MApfktgc2LWfcq5pXzpGKu6D4wxpfg9AEdMppbMCx2cQjkvPOMEivlns/pubhtml">
+                               value="https://docs.google.com/spreadsheets/d/e/2PACX-1vRzl3PdvxEtsEDFBqGf02U9MApfktgc2LWfcq5pXzpGKu6D4wxpfg9AEdMppbMCx2cQjkvPOMEivlns/pubhtml"
+                               readonly>
                     </div>
                 </div>
 
@@ -900,6 +926,8 @@
             updateStatus('Pronto. Insira o CEP de origem e clique em Buscar Top 10.', 'default');
             el('errorBox').innerHTML = '';
             currentRows = [];
+            // Esconder link do mapa ao limpar
+            el('cepMapsLink').style.display = 'none';
         });
 
         // Filtro por setor
@@ -909,6 +937,18 @@
                 setTimeout(() => {
                     processRows(currentRows, currentCepOrigem, currentCidadeOrigem);
                 }, 100);
+            }
+        });
+
+        // Atualizar link do Google Maps quando o CEP for alterado
+        el('cepInput').addEventListener('input', (e) => {
+            const cepRaw = (e.target.value || '').replace(/\D/g,'');
+            if (cepRaw.length >= 8) {
+                const cepFormatado = cepRaw.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+                el('cepMapsLink').href = `https://www.google.com/maps/search/?api=1&query=${cepFormatado}`;
+                el('cepMapsLink').style.display = 'inline-flex';
+            } else {
+                el('cepMapsLink').style.display = 'none';
             }
         });
 
@@ -1448,4 +1488,3 @@
     </script>
 </body>
 </html>
-
