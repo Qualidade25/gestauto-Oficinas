@@ -210,6 +210,7 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .checkbox-group {
@@ -667,6 +668,18 @@
             min-width: 120px;
         }
 
+        /* NOVO: Estilo para filtro de especialidades */
+        .filter-especialidade {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            cursor: pointer;
+            min-width: 200px;
+        }
+
         @media (max-width: 1200px) {
             .container {
                 max-width: 100%;
@@ -757,7 +770,7 @@
                 <h1>Busca de Oficinas - Top 10</h1>
                 <p>Encontre as melhores oficinas próximas ao CEP informado</p>
                 
-                <!-- Filtro por Setor -->
+                <!-- Filtro por Setor e Status -->
                 <div class="filter-section">
                     <div class="filter-group">
                         <span class="filter-label">🔧 Filtrar por Setor:</span>
@@ -765,6 +778,13 @@
                             <option value="todos">Todos os Setores</option>
                             <option value="Movida">Movida</option>
                             <option value="Multimarcas">Multimarcas</option>
+                        </select>
+                        
+                        <span class="filter-label">📊 Status:</span>
+                        <select id="filterStatus" class="filter-select">
+                            <option value="todos">Todos os Status</option>
+                            <option value="ATIVO">ATIVO</option>
+                            <option value="INATIVO">INATIVO</option>
                         </select>
                     </div>
                 </div>
@@ -811,7 +831,7 @@
                     <label for="useSample">Usar dados de exemplo (fallback)</label>
                 </div>
 
-                <!-- Buttons -->
+                <!-- Buttons e Filtro de Especialidade -->
                 <div class="button-group">
                     <button id="buscar" class="btn btn-primary">
                         <span>🔍 Buscar Top 10 Oficinas</span>
@@ -822,6 +842,20 @@
                     <button id="limpar" class="btn btn-outline">
                         <span>🔄 Limpar</span>
                     </button>
+                    
+                    <span class="filter-label">🔧 Especialidade:</span>
+                    <select id="filterEspecialidade" class="filter-especialidade">
+                        <option value="todas">Todas as Especialidades</option>
+                        <option value="Mecânica geral incluindo motor">Mecânica geral incluindo motor</option>
+                        <option value="Mecânica de motores a diesel">Mecânica de motores a diesel</option>
+                        <option value="Mecânica de caixa de cambio mecânico">Mecânica de caixa de cambio mecânico</option>
+                        <option value="Mecânica de câmbio automático">Mecânica de câmbio automático</option>
+                        <option value="Mecânica de ar condicionado">Mecânica de ar condicionado</option>
+                        <option value="Mecânica de parte eletrica, módulos">Mecânica de parte eletrica, módulos</option>
+                        <option value="Mecânica de caixa de direção">Mecânica de caixa de direção</option>
+                        <option value="Mecânica de caixa de câmbio automatizado">Mecânica de caixa de câmbio automatizado</option>
+                        <option value="Mecânica Geral">Mecânica Geral</option>
+                    </select>
                 </div>
 
                 <!-- Status -->
@@ -932,6 +966,26 @@
 
         // Filtro por setor
         el('filterSetor').addEventListener('change', () => {
+            if (currentRows.length > 0 && currentCepOrigem && currentCidadeOrigem) {
+                updateStatus('<span class="loading-spinner"></span> Aplicando filtro...', 'loading');
+                setTimeout(() => {
+                    processRows(currentRows, currentCepOrigem, currentCidadeOrigem);
+                }, 100);
+            }
+        });
+
+        // Filtro por status
+        el('filterStatus').addEventListener('change', () => {
+            if (currentRows.length > 0 && currentCepOrigem && currentCidadeOrigem) {
+                updateStatus('<span class="loading-spinner"></span> Aplicando filtro...', 'loading');
+                setTimeout(() => {
+                    processRows(currentRows, currentCepOrigem, currentCidadeOrigem);
+                }, 100);
+            }
+        });
+
+        // Filtro por especialidade
+        el('filterEspecialidade').addEventListener('change', () => {
             if (currentRows.length > 0 && currentCepOrigem && currentCidadeOrigem) {
                 updateStatus('<span class="loading-spinner"></span> Aplicando filtro...', 'loading');
                 setTimeout(() => {
@@ -1145,23 +1199,42 @@
             return values;
         }
 
-        // Processar dados com filtro de setor
+        // Processar dados com filtro de setor, status e especialidade
         function processRows(rows, cepRaw, cidadeOrigem) {
             try {
                 const setorFiltro = el('filterSetor').value;
+                const statusFiltro = el('filterStatus').value;
+                const especialidadeFiltro = el('filterEspecialidade').value;
+                
                 let rowsFiltradas = rows;
 
                 // Aplicar filtro de setor se não for "todos"
                 if (setorFiltro !== 'todos') {
-                    rowsFiltradas = rows.filter(row => {
+                    rowsFiltradas = rowsFiltradas.filter(row => {
                         const setorRow = (row.setor || '').toString().trim();
                         return setorRow.toLowerCase() === setorFiltro.toLowerCase();
                     });
                 }
 
+                // Aplicar filtro de status se não for "todos"
+                if (statusFiltro !== 'todos') {
+                    rowsFiltradas = rowsFiltradas.filter(row => {
+                        const statusRow = (row.status || '').toString().trim().toUpperCase();
+                        return statusRow === statusFiltro.toUpperCase();
+                    });
+                }
+
+                // Aplicar filtro de especialidade se não for "todas"
+                if (especialidadeFiltro !== 'todas') {
+                    rowsFiltradas = rowsFiltradas.filter(row => {
+                        const observacoesRow = (row.observacoes || '').toString().toLowerCase();
+                        return observacoesRow.includes(especialidadeFiltro.toLowerCase());
+                    });
+                }
+
                 const grouped = agruparOficinas(rowsFiltradas);
                 const ranked = rankTop10(grouped, cepRaw, cidadeOrigem);
-                renderTable(ranked, cidadeOrigem, rows.length, setorFiltro);
+                renderTable(ranked, cidadeOrigem, rows.length, setorFiltro, statusFiltro, especialidadeFiltro);
             } catch (error) {
                 showError(`Erro ao processar dados: ${error.message}`);
                 updateStatus('<span class="error-text">Erro no processamento</span>', 'error');
@@ -1326,7 +1399,7 @@
         }
 
         // Renderizar tabela - COM ESPECIALIDADES USANDO TODA A EXTENSÃO
-        function renderTable(rows, cidadeOrigem, totalRegistros, setorFiltro) {
+        function renderTable(rows, cidadeOrigem, totalRegistros, setorFiltro, statusFiltro, especialidadeFiltro) {
             const table = el('resultTable');
             const tbody = table.querySelector('tbody');
             tbody.innerHTML = '';
