@@ -988,8 +988,8 @@
 
         <div class="card fade-in">
             <div class="card-header">
-                <h1><i class="fas fa-search-location"></i> Busca de Oficinas - Top 10</h1>
-                <p>Encontre as melhores oficinas próximas ao CEP informado (raio máximo de 30 km)</p>
+                <h1><i class="fas fa-search-location"></i> Busca de Oficinas - Ranking Completo</h1>
+                <p>Encontre todas as oficinas ordenadas por ranking de qualidade (sem limite de distância)</p>
                 
                 <div class="filter-section">
                     <div class="filter-group">
@@ -1037,7 +1037,7 @@
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="cepInput"><i class="fas fa-map-pin"></i> CEP de Origem</label>
+                        <label for="cepInput"><i class="fas fa-map-pin"></i> CEP de Origem (para cálculo de distância)</label>
                         <input type="text" id="cepInput" class="form-control" placeholder="Ex: 01311-000">
                         <a href="#" id="cepMapsLink" class="cep-maps-link" target="_blank" style="display: none;">
                             <i class="fas fa-external-link-alt"></i>
@@ -1060,13 +1060,13 @@
 
                 <div class="checkbox-group">
                     <input type="checkbox" id="filtrarPorCidadeDetectada" checked>
-                    <label for="filtrarPorCidadeDetectada">Filtrar oficinas da cidade detectada e região</label>
+                    <label for="filtrarPorCidadeDetectada">Filtrar oficinas da cidade detectada</label>
                 </div>
 
                 <div class="button-group">
                     <button id="buscar" class="btn btn-primary">
                         <i class="fas fa-search"></i>
-                        <span>Buscar Top 10 Oficinas</span>
+                        <span>Buscar Todas as Oficinas</span>
                     </button>
                     <button id="testarConexao" class="btn btn-success">
                         <i class="fas fa-satellite-dish"></i>
@@ -1093,7 +1093,7 @@
                 </div>
 
                 <div id="status" class="status-box">
-                    <i class="fas fa-info-circle"></i> Pronto. Insira o CEP de origem e clique em Buscar Top 10.
+                    <i class="fas fa-info-circle"></i> Pronto. Insira o CEP de origem e clique em Buscar Todas as Oficinas.
                 </div>
 
                 <div id="errorBox"></div>
@@ -1120,7 +1120,7 @@
                 <div id="resultContainer" style="display: none;">
                     <div class="table-container">
                         <div class="table-header">
-                            <h3><i class="fas fa-trophy"></i> Top 10 Melhores Oficinas (raio máximo de 30 km)</h3>
+                            <h3><i class="fas fa-trophy"></i> Ranking Completo de Oficinas (ordenadas por qualidade)</h3>
                         </div>
                         <div class="table-responsive">
                             <table id="resultTable">
@@ -1160,7 +1160,7 @@
         // --- CONSTANTES E CONFIGURAÇÕES ---
         const el = id => document.getElementById(id);
         const DEFAULT_SHEET_URL = el('sheetUrl').value;
-        const MAX_DISTANCIA_KM = 30;
+        const MAX_DISTANCIA_KM = 9999; // Desabilitado - valor muito alto
 
         // Cache otimizado para coordenadas
         let cepToCoordsCache = new Map();
@@ -1340,7 +1340,7 @@
             el('resultContainer').style.display = 'none';
             el('statsGrid').style.display = 'none';
             el('debug').textContent = '—';
-            updateStatus('<i class="fas fa-info-circle"></i> Pronto. Insira o CEP de origem e clique em Buscar Top 10.', 'default');
+            updateStatus('<i class="fas fa-info-circle"></i> Pronto. Insira o CEP de origem e clique em Buscar Todas as Oficinas.', 'default');
             el('errorBox').innerHTML = '';
             currentRows = [];
             el('cepMapsLink').style.display = 'none';
@@ -1435,7 +1435,7 @@
         // BUSCAR - COM DETECÇÃO AUTOMÁTICA DE CIDADE CORRIGIDA
         el('buscar').addEventListener('click', async () => {
             el('errorBox').innerHTML = '';
-            updateStatus('<span class="loading-spinner"></span> Buscando Top 10 oficinas...', 'loading');
+            updateStatus('<span class="loading-spinner"></span> Buscando todas as oficinas...', 'loading');
 
             const cepRaw = (el('cepInput').value || '').replace(/\D/g,'');
             
@@ -1454,7 +1454,7 @@
 
                 atualizarCidadeDetectada(localizacao.cidade, localizacao.estado);
 
-                updateStatus('<span class="loading-spinner"></span> Processando distâncias com validação estrita...', 'loading');
+                updateStatus('<span class="loading-spinner"></span> Processando ranking de todas as oficinas...', 'loading');
 
                 // 2. CARREGAR DADOS
                 const useSample = el('useSample').checked;
@@ -1474,8 +1474,8 @@
                 currentCidadeOrigem = localizacao.cidade;
                 currentCoordsOrigem = localizacao.coords;
 
-                // 3. PROCESSAMENTO COM VALIDAÇÃO 100% GARANTIDA
-                await processamentoComValidacaoAbsoluta(rows, cepRaw, localizacao.cidade, localizacao.estado, localizacao.coords);
+                // 3. PROCESSAMENTO SEM LIMITE DE DISTÂNCIA
+                await processamentoSemLimiteDistancia(rows, cepRaw, localizacao.cidade, localizacao.estado, localizacao.coords);
                 
             } catch (error) {
                 console.error('Erro na busca:', error);
@@ -1484,8 +1484,8 @@
             }
         });
 
-        // FUNÇÃO QUE ESTAVA FALTANDO: processamentoComValidacaoAbsoluta
-        async function processamentoComValidacaoAbsoluta(rows, cepRaw, cidadeOrigem, estadoOrigem, coordsOrigem) {
+        // FUNÇÃO MODIFICADA: processamento SEM limite de distância
+        async function processamentoSemLimiteDistancia(rows, cepRaw, cidadeOrigem, estadoOrigem, coordsOrigem) {
             try {
                 const setorFiltro = el('filterSetor').value;
                 const statusFiltro = el('filterStatus').value;
@@ -1515,7 +1515,7 @@
                 // 2. AGRUPAMENTO
                 const grouped = agruparOficinas(rowsFiltradas);
                 
-                updateStatus('<span class="loading-spinner"></span> Calculando distâncias com validação absoluta...', 'loading');
+                updateStatus('<span class="loading-spinner"></span> Calculando distâncias e ranking...', 'loading');
 
                 // 3. OBTENÇÃO DE COORDENADAS PRECISAS
                 let oficinasComCoordenadas = [];
@@ -1525,16 +1525,22 @@
                     promises.push(
                         obterCoordenadasOficinaPrecisas(oficina.cep, oficina.cidade, oficina.estado)
                             .then(coords => {
+                                const distancia = calcularDistanciaPrecisa(coordsOrigem, coords);
                                 oficinasComCoordenadas.push({
                                     ...oficina,
-                                    coords: coords
+                                    coords: coords,
+                                    distancia: distancia,
+                                    mesmaCidade: oficina.cidade.toUpperCase() === cidadeOrigem.toUpperCase()
                                 });
                             })
                             .catch(error => {
                                 console.error(`Erro ao obter coordenadas para ${oficina.nome}:`, error);
+                                const distancia = 999; // Distância padrão alta para fallback
                                 oficinasComCoordenadas.push({
                                     ...oficina,
-                                    coords: { lat: -25.4284, lon: -49.2733 }
+                                    coords: { lat: -25.4284, lon: -49.2733 },
+                                    distancia: distancia,
+                                    mesmaCidade: false
                                 });
                             })
                     );
@@ -1542,41 +1548,19 @@
                 
                 await Promise.all(promises);
 
-                // 4. VALIDAÇÃO ABSOLUTA DE 30 KM
-                const oficinasDentroLimite = validacaoAbsoluta30Km(oficinasComCoordenadas, coordsOrigem);
+                // 4. RANKING COMPLETO (SEM FILTRO POR DISTÂNCIA)
+                const ranked = rankTodasOficinas(oficinasComCoordenadas);
                 
-                // 5. FILTRO POR ESTADO (se necessário)
-                let oficinasFiltradas = oficinasDentroLimite;
-                if (estadoOrigem) {
-                    const antes = oficinasFiltradas.length;
-                    oficinasFiltradas = oficinasFiltradas.filter(o => 
-                        o.estado.toUpperCase() === estadoOrigem.toUpperCase()
-                    );
-                    const removidas = antes - oficinasFiltradas.length;
-                    if (removidas > 0) {
-                        console.log(`🗺️ Removidas ${removidas} oficinas de outros estados`);
-                    }
-                }
-
-                // 6. VERIFICAÇÃO FINAL - GARANTIA ABSOLUTA
-                const violacoes = oficinasFiltradas.filter(o => o.distancia > MAX_DISTANCIA_KM);
-                if (violacoes.length > 0) {
-                    console.error('🚨 CRÍTICO: Oficinas acima do limite passaram pela validação:', violacoes);
-                    oficinasFiltradas = oficinasFiltradas.filter(o => o.distancia <= MAX_DISTANCIA_KM);
-                }
-
-                // 7. RANKING E RESULTADO
-                if (oficinasFiltradas.length === 0) {
-                    let mensagemErro = `Nenhuma oficina encontrada dentro do raio de ${MAX_DISTANCIA_KM} km do CEP ${cepRaw}.`;
+                // 5. RESULTADO
+                if (ranked.length === 0) {
+                    let mensagemErro = `Nenhuma oficina encontrada com os filtros aplicados.`;
                     if (filtrarPorCidade) {
                         mensagemErro += ` Filtro aplicado: cidade "${cidadeDetectadaAtual}".`;
                     }
                     throw new Error(mensagemErro);
                 }
-
-                const ranked = rankTop10Completo(oficinasFiltradas);
                 
-                let mensagemResultado = `✅ ${ranked.length} oficinas no TOP 10 (${oficinasFiltradas.length} dentro de ${MAX_DISTANCIA_KM} km)`;
+                let mensagemResultado = `✅ ${ranked.length} oficinas encontradas e ordenadas por ranking de qualidade`;
                 if (filtrarPorCidade) {
                     mensagemResultado += ` | Filtro: ${cidadeDetectadaAtual}`;
                 } else {
@@ -1591,7 +1575,35 @@
             }
         }
 
-        // FUNÇÕES ADICIONAIS QUE ESTAVAM FALTANDO
+        // NOVA FUNÇÃO: Ranking para TODAS as oficinas (sem limite)
+        function rankTodasOficinas(oficinas) {
+            console.log(`🎯 Iniciando ranking de ${oficinas.length} oficinas...`);
+            
+            const ranked = oficinas.map(o => {
+                const ticketMedio = o.ticketMedio || 0;
+                const volume = o.volume || 0;
+                
+                // Score baseado na mesma lógica, mas sem limitar por distância
+                const scoreDistancia = o.distancia <= 30 ? (30 - o.distancia) * 100 : 0;
+                const scoreTicket = ticketMedio > 0 ? (1000000 / ticketMedio) : 0;
+                const scoreVolume = volume * 100;
+                const bonusCidade = o.mesmaCidade ? 200 : 0;
+                
+                const scoreFinal = scoreDistancia + (scoreTicket * 0.3) + (scoreVolume * 0.2) + bonusCidade;
+                
+                return {
+                    ...o,
+                    scoreFinal
+                };
+            })
+            .sort((a, b) => b.scoreFinal - a.scoreFinal);
+            
+            console.log(`🏆 Ranking final: ${ranked.length} oficinas ordenadas por qualidade`);
+            
+            return ranked;
+        }
+
+        // FUNÇÕES ADICIONAIS
         async function obterCoordenadasOficinaPrecisas(cep, cidade, estado) {
             cep = cep.replace(/\D/g, '');
             
@@ -1643,81 +1655,6 @@
             const distancia = R * c;
             
             return Math.round(distancia * 10) / 10;
-        }
-
-        function validacaoAbsoluta30Km(oficinasComCoords, coordsOrigem) {
-            const oficinasValidas = [];
-            const oficinasInvalidas = [];
-            
-            console.log(`🔍 Iniciando validação ABSOLUTA de ${oficinasComCoords.length} oficinas...`);
-            
-            for (const oficina of oficinasComCoords) {
-                if (!oficina.coords || !oficina.coords.lat || !oficina.coords.lon) {
-                    console.warn(`❌ Oficina ${oficina.nome} sem coordenadas válidas`);
-                    oficinasInvalidas.push({ nome: oficina.nome, motivo: 'Coordenadas inválidas' });
-                    continue;
-                }
-                
-                const distancia = calcularDistanciaPrecisa(coordsOrigem, oficina.coords);
-                
-                if (distancia <= MAX_DISTANCIA_KM) {
-                    oficinasValidas.push({
-                        ...oficina,
-                        distancia: distancia,
-                        validada: true,
-                        mesmaCidade: oficina.cidade.toUpperCase() === currentCidadeOrigem.toUpperCase()
-                    });
-                } else {
-                    oficinasInvalidas.push({ 
-                        nome: oficina.nome, 
-                        cidade: oficina.cidade,
-                        distancia: distancia,
-                        motivo: `Distância ${distancia} km > ${MAX_DISTANCIA_KM} km`
-                    });
-                }
-            }
-            
-            console.log(`📊 VALIDAÇÃO ABSOLUTA CONCLUSÃO:`);
-            console.log(`✅ ${oficinasValidas.length} oficinas DENTRO do limite de ${MAX_DISTANCIA_KM} km`);
-            console.log(`❌ ${oficinasInvalidas.length} oficinas FORA do limite`);
-            
-            if (oficinasInvalidas.length > 0) {
-                console.table(oficinasInvalidas);
-            }
-            
-            return oficinasValidas;
-        }
-
-        function rankTop10Completo(oficinas) {
-            console.log(`🎯 Iniciando ranking de ${oficinas.length} oficinas para TOP 10...`);
-            
-            const ranked = oficinas.map(o => {
-                const ticketMedio = o.ticketMedio || 0;
-                const volume = o.volume || 0;
-                
-                const scoreDistancia = (30 - o.distancia) * 100;
-                const scoreTicket = ticketMedio > 0 ? (1000000 / ticketMedio) : 0;
-                const scoreVolume = volume * 100;
-                const bonusCidade = o.mesmaCidade ? 200 : 0;
-                
-                const scoreFinal = scoreDistancia + (scoreTicket * 0.3) + (scoreVolume * 0.2) + bonusCidade;
-                
-                return {
-                    ...o,
-                    scoreFinal
-                };
-            })
-            .sort((a, b) => b.scoreFinal - a.scoreFinal)
-            .slice(0, 10);
-            
-            console.log(`🏆 Ranking final: ${ranked.length} oficinas no TOP 10`);
-            
-            if (ranked.length > 10) {
-                console.warn(`⚠️ Aviso: Ranking retornou ${ranked.length} oficinas, limitando para 10`);
-                return ranked.slice(0, 10);
-            }
-            
-            return ranked;
         }
 
         // Função para buscar dados da planilha
@@ -1941,14 +1878,8 @@
             
             if (rows.length === 0) {
                 el('resultContainer').style.display = 'none';
-                showError(`Nenhuma oficina encontrada dentro do raio de ${MAX_DISTANCIA_KM} km do CEP informado.`);
+                showError(`Nenhuma oficina encontrada com os filtros aplicados.`);
                 return;
-            }
-            
-            const violacoes = rows.filter(r => r.distancia > MAX_DISTANCIA_KM);
-            if (violacoes.length > 0) {
-                console.error('🚨 CRÍTICO ABSOLUTO: Oficinas acima do limite no render:', violacoes);
-                rows = rows.filter(r => r.distancia <= MAX_DISTANCIA_KM);
             }
             
             rows.forEach((r, index) => {
@@ -1966,7 +1897,8 @@
                     : `${escapeHtml(r.cidade)}/${escapeHtml(r.estado)}`;
                 
                 const distanciaColor = r.distancia <= 5 ? '#157f0d' : 
-                                     r.distancia <= 15 ? '#f39c12' : '#e74c3c';
+                                     r.distancia <= 15 ? '#f39c12' : 
+                                     r.distancia <= 30 ? '#e67e22' : '#e74c3c';
                 
                 const distanciaHTML = `
                     <div class="distancia-com-mapa">
@@ -2013,7 +1945,7 @@
             el('statsGrid').style.display = 'grid';
             
             const mensagemFinal = mensagemResultado || 
-                                `✅ Busca concluída! ${rows.length} oficinas encontradas dentro de ${MAX_DISTANCIA_KM} km`;
+                                `✅ Busca concluída! ${rows.length} oficinas encontradas e ordenadas por qualidade`;
             updateStatus(`<span class="success-text"><i class="fas fa-check-circle"></i> ${mensagemFinal}</span>`, 'success');
         }
 
@@ -2116,12 +2048,12 @@
         // Função de compatibilidade
         async function processRows(rows, cepRaw, cidadeOrigem, coordsOrigem) {
             const localizacao = await obterCidadePorCEP(cepRaw);
-            return processamentoComValidacaoAbsoluta(rows, cepRaw, localizacao.cidade, localizacao.estado, coordsOrigem);
+            return processamentoSemLimiteDistancia(rows, cepRaw, localizacao.cidade, localizacao.estado, coordsOrigem);
         }
 
         // Inicialização
         console.log('🚀 GestAuto Brasil - Sistema carregado com sucesso!');
-        updateStatus('<i class="fas fa-info-circle"></i> Pronto. Insira o CEP de origem e clique em Buscar Top 10.', 'default');
+        updateStatus('<i class="fas fa-info-circle"></i> Pronto. Insira o CEP de origem e clique em Buscar Todas as Oficinas.', 'default');
     </script>
 </body>
 </html>
